@@ -4,6 +4,8 @@ const TodoApp = () => {
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState("");
   const [filter, setFilter] = useState("all"); // For filtering tasks
+  const [editTaskId, setEditTaskId] = useState(null); // Track the task being edited
+  const [editText, setEditText] = useState(""); // Track the new text during editing
 
   // Add task
   const addTask = () => {
@@ -26,6 +28,29 @@ const TodoApp = () => {
       )
     );
   };
+
+  const startEditing = (id, currentText) => {
+    setEditTaskId(id); // Set the task ID being edited
+    setEditText(currentText); // Pre-fill the input with the current task text
+  };
+
+  // Save the edited task
+  const saveEdit = (id) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, text: editText.trim() } : task
+      )
+    );
+    setEditTaskId(null); // Reset editing state
+    setEditText(""); // Clear the edit text
+  };
+
+  // Cancel editing
+  const cancelEdit = () => {
+    setEditTaskId(null); // Reset editing state
+    setEditText(""); // Clear the edit text
+  };
+
 
   // Filter tasks based on the current filter
   const filteredTasks = tasks.filter((task) => {
@@ -83,18 +108,55 @@ const TodoApp = () => {
               task.completed ? "bg-green-100" : "bg-white"
             }`}
           >
-            <span
-              className={`cursor-pointer ${task.completed ? "line-through" : ""}`}
-              onClick={() => toggleTask(task.id)}
-            >
-              {task.text}
-            </span>
-            <button
-              onClick={() => removeTask(task.id)}
-              className="ml-4 text-red-500"
-            >
-              Remove
-            </button>
+            {/* Editing View */}
+            {editTaskId === task.id ? (
+              <div className="flex items-center w-full">
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  className="flex-grow px-2 py-1 border rounded"
+                />
+                <button
+                  onClick={() => saveEdit(task.id)}
+                  className="ml-2 px-2 py-1 bg-green-500 text-white rounded"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={cancelEdit}
+                  className="ml-2 px-2 py-1 bg-red-500 text-white rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              // Normal Task View
+              <div className="flex items-center w-full justify-between">
+                <span
+                  className={`cursor-pointer ${
+                    task.completed ? "line-through" : ""
+                  }`}
+                  onClick={() => toggleTask(task.id)}
+                >
+                  {task.text}
+                </span>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => startEditing(task.id, task.text)}
+                    className="px-2 py-1 bg-yellow-500 text-white rounded"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => removeTask(task.id)}
+                    className="px-2 py-1 bg-red-500 text-white rounded"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
           </li>
         ))}
       </ul>

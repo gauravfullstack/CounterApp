@@ -1,5 +1,6 @@
 import './App.css'
 import Counter from './Features/Counter'
+import GreetingApp from './Features/GreetingApp'
 import TodoApp from './Features/TodoApp'
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
     <div>
       <Counter/>
       <TodoApp/>
+      <GreetingApp/>
     </div>
   )
 }

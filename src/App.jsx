@@ -1,4 +1,5 @@
 import './App.css'
+import Accordion from './Features/AccordionItem'
 import Counter from './Features/Counter'
 import GreetingApp from './Features/GreetingApp'
 import TemperatureConverter from './Features/TempConverter'
@@ -12,6 +13,7 @@ function App() {
       <TodoApp/>
       <GreetingApp/>
       <TemperatureConverter/>
+      <Accordion/>
     </div>
   )
 }
